@@ -40,7 +40,7 @@ with DAG(
         print(f"pulled_value_2 : {pulled_value_2}")
 
 
-    end = EmptyOperator(task_id="end", trigger_rule="none_failed")
+    end = EmptyOperator(task_id="end")
 
     push_task = push()
     push_by_returning_task = push_by_returning()
@@ -48,6 +48,3 @@ with DAG(
     pull_data_from_xcom_task = pull_data_from_xcom()
 
     start >> [push_task, push_by_returning_task] >> pull_data_from_xcom_task >> end
-
-
-    
