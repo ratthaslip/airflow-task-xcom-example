@@ -17,28 +17,34 @@ with DAG(
     start = EmptyOperator(task_id="start")
 
     @task
-    def push_by_returning():
+    def push_by_returning(ti=None):
         value_1 = {"a": "b"}
         return value_1
 
     @task
     def push(ti=None):
         value_2 = [1, 2, 3]
-        ti.xcom_push(key="push_key", value=value_2)
+        ti.xcom_push(
+            key="push_key", 
+            value=value_2
+        )
 
     @task
     def pull_data_from_xcom(ti=None):
         pulled_value_1 = ti.xcom_pull(
-            task_ids="push_by_returning", 
-            key="return_value"
-            )
+            task_ids="push_by_returning"
+        )
+
         pulled_value_2 = ti.xcom_pull(
-            task_ids="push", 
-            key="push_key"
-            )
+            task_ids="push", key="push_key"
+        )
+
+        pulled_value_3 = ti.xcom_pull(
+            task_ids="push",
+        )
         print(f"pulled_value_1 : {pulled_value_1}")
         print(f"pulled_value_2 : {pulled_value_2}")
-
+        print(f"pulled_value_3 : {pulled_value_3}")
 
     end = EmptyOperator(task_id="end")
 
